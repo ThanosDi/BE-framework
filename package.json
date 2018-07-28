@@ -1,13 +1,12 @@
 {
-  "name": "botengine-webhook",
-  "version": "1.0.0",
-  "description": "",
+  "name": "be-framework",
+  "version": "0.1.0",
+  "description": "BE is a framework for supercharging your BotEngine bots",
   "main": "src/index.js",
   "scripts": {
     "precommit": "lint-staged",
     "prepush": "npm test",
     "lint": "xo",
-    "prettier": "prettier **/*.js",
     "test": "jest --coverage"
   },
   "keywords": [],
@@ -39,7 +38,8 @@
   "xo": {
     "envs": [
       "jest"
-    ]
+		],
+		"prettier": true
   },
   "dependencies": {
     "micro": "^9.3.2",
