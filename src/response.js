@@ -1,4 +1,4 @@
-const {map, ifElse, is, identity} = require('ramda')
+const {map, ifElse, is, identity, pipe} = require('ramda')
 
 const respond = (...responses) => async props => ({
 	responses: await Promise.all(map(
@@ -7,17 +7,33 @@ const respond = (...responses) => async props => ({
 	))
 })
 
-const text = ({elements=[], filters=[]}) => ({
-	type: 'text',
-	elements,
-	filters,
-})
+const text = ifElse(
+	is(String),
+	text => ({
+		type: 'text',
+		elements: [text],
+		filters: []
+	}),
+	({elements=[], filters=[]}) => ({
+		type: 'text',
+		elements,
+		filters,
+	})
+)
 
-const image = ({imageUrl, filters=[]}) => ({
-	type: 'image',
-	imageUrl,
-	filters,
-})
+const image = ifElse(
+	is(String),
+	imageUrl => ({
+		type: 'image',
+		imageUrl,
+		filters: []
+	}),
+	({imageUrl, filters=[]}) => ({
+		type: 'image',
+		imageUrl,
+		filters,
+	})
+)
 
 const quickReplies = ({title, buttons, filters=[]}) => ({
 	type: 'quickReplies',
@@ -43,14 +59,19 @@ const card = ({title, subtitle, imageUrl, buttons, filters=[]}) => ({
 
 const button = ({title, buttons, filters=[]}) => ({
 	type: 'button',
+	title,
 	buttons,
 	filters,
 })
 
-const end = ({filters=[]}) => ({
-	type: 'end',
-	filters,
-})
+const end = pipe(
+	props => props || {},
+	({filters=[]}) => ({
+		type: 'end',
+		filters,
+	})
+)
+
 
 const webhook = ({webhookId, filters=[]}) => ({
 	type: 'webhook',

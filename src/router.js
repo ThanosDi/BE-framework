@@ -1,4 +1,4 @@
-const {cond, curry, pathEq, T, pipeP, pipe} = require('ramda')
+const {cond, curry, pathEq, T, prop, pipeP, pipe} = require('ramda')
 const parseBody = require('./lib/parse-body')
 
 const router = (...routes) => pipeP(
