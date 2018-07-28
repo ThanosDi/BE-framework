@@ -5,3 +5,10 @@ cache:
   directories:
   - node_modules
 script: npm test
+deploy:
+  provider: npm
+  on:
+    branch: master
+    tags: true
+  api_key:
+    secure: k4czgAxa8I6Qrqjl3xyFTHMYG24MSNCFngRDNKv2+mP2jprsEvsg+9PupG3r8LiJQeebiOIoz097WszeAeDsgSeoek8nhHMmCMc3HwUDG/ZroYCQhVt53ujADYOD+LxiUjxLzZBmuSh05/RU15F65eyL4AbIZ7b/q4PuiZQGsgHJWqvBy6whbuL/54VJV9lDpzy2kcSGrjElzzCjLBykLvS9zL1wdsxM5QbbQ3aA6oH9Tdq+w6d45fCLab5Wo2P9ZXMwVPRYq4JlWAkq6Xmsz6ble3CBiet2ZXnt6+OubREqbItabCSKW6NSO+qVBRfGRVaVtVANF/9CfngHdS5pg/VzJwnm+kDDtkhFGimyLyADBY5eGMjxwDNnbxllF6964Jo7Q8hibDNwWmzbDIKqHPUXeJxhWEiK97GC9S9RTns6SII58crcHtCcMwawCcnhT1asQmE/sd2Qpl+J5Y/s5FJF6HCfF6pnuHfjgGmbEHSICu4b9LEuubj1xwGQ7yr17r6YhTv+cVVd4ZWe22cW5c5LCKCyYXWmpscBNTVZHrac9G6PMnGT544beHTQzDA9jLP9jE5l6kcEAC2zB/1A24ZVKm30VzJ7R0ek4HMVTPQp7LAjYNupEoN+9tcurjaK3bHuevJgu8NhXRAK8lme7ALfnAhWY3EvmwC/kNN6FbA=
