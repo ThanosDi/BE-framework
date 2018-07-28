@@ -1,16 +1,12 @@
 const {cond, curry, pathEq, T, pipeP, pipe} = require('ramda')
-const {json} = require('micro')
+const parseBody = require('./lib/parse-body')
 
-const router = async (...routes) => pipeP(
-	async (req, res) => {
-		const payload = await json(req)
-
-		return {
-			req,
-			res,
-			payload,
-		}
-	},
+const router = (...routes) => pipeP(
+	async (req, res) => ({
+		req,
+		res,
+		payload: await parseBody(req),
+	}),
 	cond(routes)
 )
 

@@ -18,14 +18,15 @@
     "ramda": "^0.25.0"
   },
   "devDependencies": {
-		"micro-dev": "^3.0.0",
     "delay": "^3.0.0",
     "eslint-config-prettier": "^2.9.0",
     "husky": "^0.14.3",
     "jest": "^22.3.0",
     "lint-staged": "^6.1.0",
+    "micro-dev": "^3.0.0",
     "nodemon": "^1.15.1",
     "prettier": "^1.10.2",
+    "ramda": "^0.25.0",
     "xo": "^0.20.3"
   },
   "lint-staged": {
@@ -38,5 +39,10 @@
     "envs": [
       "jest"
     ]
+  },
+  "dependencies": {
+    "micro": "^9.3.2",
+    "query-string": "^6.1.0",
+    "url-parse": "^1.4.1"
   }
 }
