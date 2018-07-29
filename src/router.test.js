@@ -1,4 +1,4 @@
-const {compose, F, T} = require('ramda');
+const {F, T} = require('ramda');
 const httpMocks = require('node-mocks-http');
 const {
 	router,
@@ -143,9 +143,7 @@ describe('router', () => {
 	});
 
 	test('method', () => {
-		const [predicate] = method('GET')(
-			() => 'works!',
-		);
+		const [predicate] = method('GET')(() => 'works!');
 
 		const props = {
 			req: httpMocks.createRequest({
@@ -159,12 +157,10 @@ describe('router', () => {
 
 		expect(predicate()).toEqual(false);
 		expect(predicate(props)).toEqual(true);
-	})
+	});
 
 	test('path', () => {
-		const [predicate, handler] = path('/user/:id')(
-			props => props,
-		);
+		const [predicate, handler] = path('/user/:id')(props => props);
 
 		const props = {
 			req: httpMocks.createRequest({
@@ -179,6 +175,6 @@ describe('router', () => {
 		expect(predicate()).toEqual(false);
 		expect(predicate(props)).toBeTruthy();
 
-		expect(handler(props).params).toBeInstanceOf(Object)
-	})
+		expect(handler(props).params).toBeInstanceOf(Object);
+	});
 });
