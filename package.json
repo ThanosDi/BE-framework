@@ -1,6 +1,6 @@
 {
   "name": "be-framework",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "access": "public",
   "description": "BE is a framework for supercharging your BotEngine bots",
   "main": "src/index.js",
