@@ -15,6 +15,14 @@ const {
 
 const handler = jest.fn();
 
+const postRequest = httpMocks.createRequest({
+	method: 'POST',
+	path: '/',
+	headers: {
+		'content-type': 'application/json',
+	},
+});
+
 beforeEach(jest.resetAllMocks);
 
 describe('router', () => {
@@ -68,6 +76,7 @@ describe('router', () => {
 					storyId: '1',
 				},
 			},
+			req: postRequest,
 		};
 
 		expect(predicate()).toEqual(false);
@@ -84,6 +93,7 @@ describe('router', () => {
 					},
 				},
 			},
+			req: postRequest,
 		};
 
 		expect(predicate()).toEqual(false);
@@ -98,6 +108,7 @@ describe('router', () => {
 					trigger: '1',
 				},
 			},
+			req: postRequest,
 		};
 
 		expect(predicate()).toEqual(false);
@@ -112,6 +123,7 @@ describe('router', () => {
 					source: '1',
 				},
 			},
+			req: postRequest,
 		};
 
 		expect(predicate()).toEqual(false);
@@ -176,5 +188,6 @@ describe('router', () => {
 		expect(predicate(props)).toBeTruthy();
 
 		expect(handler(props).params).toBeInstanceOf(Object);
+		expect(handler(props).params.id).toEqual('23');
 	});
 });

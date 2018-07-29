@@ -1,6 +1,8 @@
-const {cond, curry, pathEq, pathOr, T, prop, pipeP, pipe} = require('ramda');
+const {allPass, cond, curry, pathEq, pathOr, T, pipeP} = require('ramda');
 const UrlPattern = require('url-pattern');
 const parseBody = require('./lib/parse-body');
+
+const isPOST = (props = {}) => pathEq(['req', 'method'], 'POST', props);
 
 const router = (...routes) =>
 	pipeP(
@@ -16,53 +18,44 @@ const route = curry((predicate, handler) => [predicate, handler]);
 
 const story = id =>
 	route(
-		pipe(
-			prop('payload'),
-			pathEq(['result', 'storyId'], id),
-		),
+		allPass([
+			isPOST,
+			(props = {}) => pathEq(['payload', 'result', 'storyId'], id, props),
+		]),
 	);
 
 const interaction = id =>
 	route(
-		pipe(
-			prop('payload'),
-			pathEq(['result', 'interaction', 'id'], id),
-		),
+		allPass([
+			isPOST,
+			(props = {}) =>
+				pathEq(['payload', 'result', 'interaction', 'id'], id, props),
+		]),
 	);
 
 const trigger = trigger =>
 	route(
-		pipe(
-			prop('payload'),
-			pathEq(['result', 'trigger'], trigger),
-		),
+		allPass([
+			isPOST,
+			(props = {}) => pathEq(['payload', 'result', 'trigger'], trigger, props),
+		]),
 	);
 
 const source = source =>
 	route(
-		pipe(
-			prop('payload'),
-			pathEq(['result', 'source'], source),
-		),
+		allPass([
+			isPOST,
+			(props = {}) => pathEq(['payload', 'result', 'source'], source, props),
+		]),
 	);
 
 const headers = ([key, value]) =>
-	route(
-		pipe(
-			prop('req'),
-			pathEq(['headers', key], value),
-		),
-	);
+	route((props = {}) => pathEq(['req', 'headers', key], value, props));
 
 const always = route(T);
 
 const method = httpMethod =>
-	route(
-		pipe(
-			prop('req'),
-			pathEq(['method'], httpMethod),
-		),
-	);
+	route((props = {}) => pathEq(['req', 'method'], httpMethod, props));
 
 const path = pattern => handler => [
 	props => {
