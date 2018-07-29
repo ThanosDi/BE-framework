@@ -1,7 +1,7 @@
 {
   "name": "be-framework",
-  "version": "0.1.0",
-	"access": "public",
+  "version": "0.2.0",
+  "access": "public",
   "description": "BE is a framework for supercharging your BotEngine bots",
   "main": "src/index.js",
   "scripts": {
@@ -10,17 +10,22 @@
     "lint": "xo",
     "test": "jest --coverage"
   },
-  "keywords": ["bot", "bots", "botengine"],
+  "keywords": [
+    "bot",
+    "bots",
+    "botengine"
+  ],
   "author": "Marios Antonoudiou <mariosant@sent.com>",
   "license": "MIT",
   "peerDependencies": {
     "micro": "^9.3.2",
     "ramda": "^0.25.0"
   },
-	"dependencies": {
-		"query-string": "^6.1.0",
-		"url-parse": "^1.4.1"
-	},
+  "dependencies": {
+    "query-string": "^6.1.0",
+    "url-parse": "^1.4.1",
+    "url-pattern": "^1.0.3"
+  },
   "devDependencies": {
     "delay": "^3.0.0",
     "eslint-config-prettier": "^2.9.0",
@@ -44,10 +49,10 @@
   "xo": {
     "envs": [
       "jest"
-		],
-		"prettier": true
-	},
-	"jest": {
-		"testEnvironment": "node"
-	}
+    ],
+    "prettier": true
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
 }
