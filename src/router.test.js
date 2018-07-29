@@ -1,4 +1,4 @@
-const {F, T} = require('ramda');
+const {compose, F, T} = require('ramda');
 const httpMocks = require('node-mocks-http');
 const {
 	router,
@@ -9,6 +9,8 @@ const {
 	source,
 	headers,
 	always,
+	method,
+	path,
 } = require('./router');
 
 const handler = jest.fn();
@@ -16,7 +18,7 @@ const handler = jest.fn();
 beforeEach(jest.resetAllMocks);
 
 describe('router', () => {
-	test('minimal example', async () => {
+	test('router', async () => {
 		const req = httpMocks.createRequest({
 			method: 'GET',
 			url: '/',
@@ -42,27 +44,23 @@ describe('router', () => {
 		expect(notToCall).not.toHaveBeenCalled();
 		expect(handler).toHaveBeenCalled();
 	});
-});
 
-describe('route', () => {
-	test('minimal example', () => {
+	test('route', () => {
 		const [predicate, handler] = route(T, () => 'works!');
 
 		expect(predicate()).toEqual(true);
 		expect(handler()).toEqual('works!');
 	});
 
-	test('is curried', () => {
+	test('route is curried', () => {
 		const fallbackRoute = route(T);
 		const [predicate, handler] = fallbackRoute(() => 'works!');
 
 		expect(predicate()).toEqual(true);
 		expect(handler()).toEqual('works!');
 	});
-});
 
-describe('story', () => {
-	test('minimal example', () => {
+	test('story', () => {
 		const [predicate] = story('1')(() => 'works!');
 		const props = {
 			payload: {
@@ -75,10 +73,8 @@ describe('story', () => {
 		expect(predicate()).toEqual(false);
 		expect(predicate(props)).toEqual(true);
 	});
-});
 
-describe('interaction', () => {
-	test('minimal example', () => {
+	test('interaction', () => {
 		const [predicate] = interaction('1')(() => 'works!');
 		const props = {
 			payload: {
@@ -93,10 +89,8 @@ describe('interaction', () => {
 		expect(predicate()).toEqual(false);
 		expect(predicate(props)).toEqual(true);
 	});
-});
 
-describe('trigger', () => {
-	test('minimal example', () => {
+	test('trigger', () => {
 		const [predicate] = trigger('1')(() => 'works!');
 		const props = {
 			payload: {
@@ -109,10 +103,8 @@ describe('trigger', () => {
 		expect(predicate()).toEqual(false);
 		expect(predicate(props)).toEqual(true);
 	});
-});
 
-describe('source', () => {
-	test('minimal example', () => {
+	test('source', () => {
 		const [predicate] = source('1')(() => 'works!');
 		const props = {
 			payload: {
@@ -125,10 +117,8 @@ describe('source', () => {
 		expect(predicate()).toEqual(false);
 		expect(predicate(props)).toEqual(true);
 	});
-});
 
-describe('headers', () => {
-	test('minimal example', () => {
+	test('headers', () => {
 		const [predicate] = headers(['content-type', 'application/json'])(
 			() => 'works!',
 		);
@@ -145,12 +135,50 @@ describe('headers', () => {
 		expect(predicate()).toEqual(false);
 		expect(predicate(props)).toEqual(true);
 	});
-});
 
-describe('always', () => {
-	test('minimal example', () => {
+	test('always', () => {
 		const [predicate] = always(() => 'It works!');
 
 		expect(predicate()).toEqual(true);
 	});
+
+	test('method', () => {
+		const [predicate] = method('GET')(
+			() => 'works!',
+		);
+
+		const props = {
+			req: httpMocks.createRequest({
+				method: 'GET',
+				path: '/',
+				headers: {
+					'content-type': 'application/json',
+				},
+			}),
+		};
+
+		expect(predicate()).toEqual(false);
+		expect(predicate(props)).toEqual(true);
+	})
+
+	test('path', () => {
+		const [predicate, handler] = path('/user/:id')(
+			props => props,
+		);
+
+		const props = {
+			req: httpMocks.createRequest({
+				method: 'GET',
+				url: '/user/23',
+				headers: {
+					'content-type': 'application/json',
+				},
+			}),
+		};
+
+		expect(predicate()).toEqual(false);
+		expect(predicate(props)).toBeTruthy();
+
+		expect(handler(props).params).toBeInstanceOf(Object)
+	})
 });

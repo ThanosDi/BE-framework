@@ -1,4 +1,5 @@
-const {cond, curry, pathEq, T, prop, pipeP, pipe} = require('ramda');
+const {cond, curry, pathEq, pathOr, T, prop, pipeP, pipe} = require('ramda');
+const UrlPattern = require('url-pattern')
 const parseBody = require('./lib/parse-body');
 
 const router = (...routes) =>
@@ -55,6 +56,29 @@ const headers = ([key, value]) =>
 
 const always = route(T);
 
+const method = httpMethod => route(
+	pipe(
+		prop('req'),
+		pathEq(['method'], httpMethod)
+	)
+)
+
+const path = pattern => handler => [
+	props => {
+		const url = pathOr('invalid', ['req', 'url'], props)
+		const p = new UrlPattern(pattern)
+
+		return p.match(url) || false
+	},
+	props => {
+		const url = pathOr('', ['req', 'url'], props)
+		const p = new UrlPattern(pattern)
+
+		return handler({...props, params: p.match(url)})
+	}
+
+]
+
 module.exports = {
 	router,
 	route,
@@ -64,4 +88,6 @@ module.exports = {
 	source,
 	headers,
 	always,
+	method,
+	path,
 };
