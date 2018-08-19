@@ -1,9 +1,7 @@
 const response = require('./response');
-const router = require('./router');
-const validate = require('./validate');
+const webhooks = require('./webhooks');
 
 module.exports = {
 	response,
-	router,
-	validate,
+	webhooks,
 };

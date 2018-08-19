@@ -22,9 +22,9 @@
     "ramda": "^0.25.0"
   },
   "dependencies": {
+    "basic-auth": "^2.0.0",
     "query-string": "^6.1.0",
-    "url-parse": "^1.4.1",
-    "url-pattern": "^1.0.3"
+    "url-parse": "^1.4.1"
   },
   "devDependencies": {
     "delay": "^3.0.0",

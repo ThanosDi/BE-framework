@@ -1,44 +1,30 @@
 const httpMocks = require('node-mocks-http');
 const validate = require('./validate');
 
+const challenge = 'challenge'
+const token = 'token'
+
 describe('validate', () => {
-	test('route', () => {
+	test('no need for token', () => {
 		const req = httpMocks.createRequest({
 			method: 'GET',
-			url: '/',
+			url: `/?challenge=${challenge}&token=${token}`,
 		});
-		const [route] = validate();
 
-		expect(route({req})).toEqual(true);
-	});
+		const app = validate()(() => 'works')
 
-	test('handler', () => {
+		expect(() => app(req)).not.toThrow()
+		expect(app(req)).toEqual(challenge)
+	})
+
+	test('checks token', () => {
 		const req = httpMocks.createRequest({
 			method: 'GET',
-			url: '/?token=1&challenge=abc',
+			url: `/?challenge=${challenge}&token=invalid`,
 		});
-		const [, handler] = validate();
 
-		expect(handler({req})).toEqual('abc');
-	});
+		const app = validate(token)(() => 'works')
 
-	test('handler with token', () => {
-		const req = httpMocks.createRequest({
-			method: 'GET',
-			url: '/?token=1&challenge=abc',
-		});
-		const [, handler] = validate('1');
-
-		expect(handler({req})).toEqual('abc');
-	});
-
-	test('handler with invalid token', () => {
-		const req = httpMocks.createRequest({
-			method: 'GET',
-			url: '/?token=nope&challenge=abc',
-		});
-		const [, handler] = validate('1');
-
-		expect(() => handler({req})).toThrowError('Invalid token');
-	});
+		expect(() => app(req)).toThrowError('Invalid token')
+	})
 });
