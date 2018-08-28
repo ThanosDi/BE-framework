@@ -1,21 +1,26 @@
-const {equals, pipe, prop, ifElse} = require('ramda');
+const {equals, pipe, prop, propEq, not} = require('ramda');
 const urlParse = require('url-parse');
 const {createError} = require('micro');
 
-const handleValidation = verificationToken => pipe(
+const hasValidToken = token =>
+	pipe(
+		req => urlParse(req.url, true),
+		prop('query'),
+		propEq('token', token),
+	);
+
+const handleChallenge = pipe(
 	req => urlParse(req.url, true),
 	prop('query'),
-	ifElse(
-		({token}) => verificationToken && verificationToken !== token,
-		() => {
-			throw createError(401, 'Invalid token');
-		},
-		prop('challenge'),
-	),
+	prop('challenge'),
 );
 
-module.exports = verificationToken => next => ifElse(
-	({method}) => equals('GET', method),
-	handleValidation(verificationToken),
-	next,
-)
+module.exports = token => next => (req, res) => {
+	const {method} = req;
+
+	if (not(hasValidToken(token)(req))) {
+		throw createError(401, 'Invalid token');
+	}
+
+	return equals('GET', method) ? handleChallenge(req) : next(req, res);
+};

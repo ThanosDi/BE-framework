@@ -1,9 +1,7 @@
-const {map, ifElse, is, identity, pipe} = require('ramda');
+const {ifElse, is, pipe} = require('ramda');
 
-const respond = (...responses) => async props => ({
-	responses: await Promise.all(
-		map(ifElse(is(Function), fn => fn(props), identity), responses),
-	),
+const respond = (...responses) => ({
+	responses,
 });
 
 const text = ifElse(

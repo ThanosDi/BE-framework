@@ -1,44 +1,48 @@
 const httpMocks = require('node-mocks-http');
-const {action, webhooks} = require('./webhooks');
+const {F, T} = require('ramda');
+const {route, router, always} = require('./webhooks');
 
-const handler = jest.fn().mockReturnValue('works')
+const handler = jest.fn().mockReturnValue('works');
+
+beforeEach(jest.resetAllMocks);
 
 describe('webhooks', () => {
-	test('works', () => {
+	test('router is an enhancer', () => {
 		const req = httpMocks.createRequest({
 			method: 'POST',
-			url: `/test`,
+			url: `/`,
 		});
 
-		const app = webhooks(action('test', handler))
+		const app = router(() => () => 'works');
+		expect(app(req)).toEqual('works');
+	});
 
-		expect(app(req)).toEqual('works')
-	})
-
-	test('can handle multiple', () => {
+	test('router throws not found', () => {
 		const req = httpMocks.createRequest({
 			method: 'POST',
-			url: `/test2`,
+			url: `/`,
 		});
 
-		const app = webhooks(
-			action('test1', handler),
-			action('test2', handler),
-		)
+		const app = router(next => next);
 
-		expect(app(req)).toEqual('works')
-	})
+		expect(() => app(req)).toThrowError('Not found');
+	});
 
-	test('throws not found', () => {
-		const req = httpMocks.createRequest({
-			method: 'POST',
-			url: `/unknown`,
-		});
+	test('route takes a predicate and a handler', async () => {
+		await route(T, handler)(T)();
+		await route(F, handler)(T)();
 
-		const app = webhooks(action('test', handler))
+		expect(handler).toHaveBeenCalledTimes(1);
+	});
 
-		expect(() => app(req)).toThrowError('Not found')
-	})
+	test('always executed the handler always', async () => {
+		await always(handler)()();
+		await always(handler)()();
+		await always(handler)()();
 
+		expect(handler).toHaveBeenCalledTimes(3);
+	});
 
+	test('action picks result.interaction.action');
+	test('name picks result.interaction.name');
 });

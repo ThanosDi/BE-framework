@@ -12,16 +12,10 @@ const {
 } = require('./response');
 
 describe('response module', () => {
-	test('respond', async () => {
-		const payload = await respond()();
+	test('respond', () => {
+		const payload = respond();
 
 		expect(payload.responses).toEqual([]);
-	});
-
-	test('respond takes async functions', async () => {
-		const payload = await respond(async () => ({item: 'works!'}))();
-
-		expect(payload.responses[0].item).toEqual('works!');
 	});
 
 	test('text', () => {
