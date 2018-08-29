@@ -1,17 +1,17 @@
 const httpMocks = require('node-mocks-http');
-const validate = require('./validate');
+const verify = require('./verify');
 
 const challenge = 'challenge';
 const token = 'token';
 
-describe('validate', () => {
+describe('verify', () => {
 	test('checks token', () => {
 		const req = httpMocks.createRequest({
 			method: 'POST',
 			url: `/?token=invalid`,
 		});
 
-		const app = validate(token)(() => 'works');
+		const app = verify(token)(() => 'works');
 		expect(() => app(req)).toThrow();
 	});
 
@@ -21,7 +21,7 @@ describe('validate', () => {
 			url: `/?challenge=${challenge}&token=${token}`,
 		});
 
-		const app = validate(token)(() => 'works');
+		const app = verify(token)(() => 'works');
 		expect(app(req)).toEqual(challenge);
 	});
 });
