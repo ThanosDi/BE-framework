@@ -19,4 +19,11 @@ const path = (pattern, handler) =>
 module.exports = {
 	method: curry(method),
 	path: curry(path),
+	get: method('GET'),
+	head: method('HEAD'),
+	post: method('POST'),
+	put: method('PUT'),
+	delete: method('DELETE'),
+	options: method('OPTIONS'),
+	patch: method('PATCH'),
 };
