@@ -9,7 +9,7 @@ const {
 	end,
 	webhook,
 	goto,
-} = require('./response');
+} = require('./responses');
 
 describe('response module', () => {
 	test('respond', () => {

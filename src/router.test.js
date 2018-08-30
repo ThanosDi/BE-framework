@@ -1,12 +1,12 @@
 const httpMocks = require('node-mocks-http');
 const {F, T} = require('ramda');
-const {route, router, always} = require('./webhooks');
+const {route, router, always} = require('./router');
 
 const handler = jest.fn().mockReturnValue('works');
 
 beforeEach(jest.resetAllMocks);
 
-describe('webhooks', () => {
+describe('router', () => {
 	test('router is an enhancer', () => {
 		const req = httpMocks.createRequest({
 			method: 'POST',

@@ -1,11 +1,7 @@
-const authenticate = require('./authenticate');
-const response = require('./response');
-const webhooks = require('./webhooks');
-const verify = require('./verify');
+const router = require('./router');
+const botengine = require('./botengine')
 
 module.exports = {
-	authenticate,
-	response,
-	webhooks,
-	verify,
+	botengine,
+	router,
 };
